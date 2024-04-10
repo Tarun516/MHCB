@@ -1,0 +1,1 @@
+The Mental Health Support Portal is a web application designed to provide resources and support for individuals seeking mental health assistance. This project offers a comprehensive platform where users can access articles, videos, and other resources related to mental health, connect with a chatbot for immediate assistance, and provide feedback on their experience.
