@@ -6,11 +6,10 @@ import { upload } from "../middlewares/multer.middleware.js";
 const router = Router();
 
 // Signup route
-router.post(
-  "/api/v1/register",
+router.route("/register").post(
   upload.fields([
     {
-      name: "coverimage",
+      name: "profilepic",
       maxCount: 1,
     },
   ]),
