@@ -21,6 +21,10 @@ const resourceSchema = new Schema(
       type: String,
       required: true,
     },
+    coverimage: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
