@@ -1,4 +1,3 @@
-// controllers/authController.js
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -23,12 +22,30 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
 const registerUser = asyncHandler(async (req, res) => {
   //get user details from the frontend
-  const { fullname, email, username, password, age, smoke, mobile } = req.body;
+  const {
+    fullname,
+    email,
+    username,
+    password,
+    age,
+    smoke,
+    mobile,
+    gender,
+    preferences,
+  } = req.body;
   //validation - not empty
   if (
-    [fullname, email, username, password, age, smoke, mobile].some(
-      (field) => field?.trim() === ""
-    )
+    [
+      fullname,
+      email,
+      username,
+      password,
+      age,
+      smoke,
+      mobile,
+      gender,
+      preferences,
+    ].some((field) => field?.trim() === "")
   ) {
     throw new ApiError(400, "All fields are compulsory");
   }
@@ -55,8 +72,10 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
     username: username.toLowerCase(),
     age,
+    gender,
     smoke,
     mobile,
+    preferences: preferences.toLowerCase(),
   });
 
   //remove password and refresh token field from response
@@ -80,7 +99,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
 
   //username or email
-  if (!email || username) {
+  if (!email || !username) {
     throw new ApiError(400, "Username or password is required");
   }
 
@@ -152,39 +171,38 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       incomingRefreshToken,
       process.env.REFRESH_TOKEN_SECRET
     );
-  
-    const user = await User.findById(decodedToken?._id)
-  
+
+    const user = await User.findById(decodedToken?._id);
+
     if (!user) {
       throw new ApiError(401, "Invald refresf token ");
     }
-  
-    if(incomingRefreshToken !== user?.refreshToken){
-      throw new ApiError(401,"Refresh token is expired or used")
+
+    if (incomingRefreshToken !== user?.refreshToken) {
+      throw new ApiError(401, "Refresh token is expired or used");
     }
-  
+
     const options = {
       httpOnly: true,
-      secure: true
-    }
-  
-    const {accessToken,newRefreshToken} = await generateAccessAndRefreshTokens(user._id)
-    
+      secure: true,
+    };
+
+    const { accessToken, newRefreshToken } =
+      await generateAccessAndRefreshTokens(user._id);
+
     return res
-    .status(200)
-    .cookie("accessToken",accessToken,options)
-    .cookie("refreshToken",newRefreshToken,options)
-    .json(
-      new ApiResponse(
-        200,
-        {accessToken,refreshToken: newRefreshToken},
-        "Access token refreshed"
-      )
-    )
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", newRefreshToken, options)
+      .json(
+        new ApiResponse(
+          200,
+          { accessToken, refreshToken: newRefreshToken },
+          "Access token refreshed"
+        )
+      );
   } catch (error) {
-    throw new ApiError(401,error?.message || "Invalid refresh token")
+    throw new ApiError(401, error?.message || "Invalid refresh token");
   }
-
-
 });
-export { registerUser, loginUser, logoutUser,refreshAccessToken };
+export { registerUser, loginUser, logoutUser, refreshAccessToken };

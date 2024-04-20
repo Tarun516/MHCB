@@ -7,6 +7,8 @@ function SignUpForm() {
     email: '',
     mobile: '',
     smoke: '',
+    mobile:'',
+    gender:'',
     age: '',
     password: '',
     confirmPassword: ''
@@ -45,7 +47,7 @@ function SignUpForm() {
   
     try {
       // Make API request to your backend server to save the user data
-      const response = await axios.post('/api/signup', formData);
+      const response = await axios.post('/register', formData);
       console.log('Response:', response.data);
   
       // Redirect to login page upon successful signup
@@ -73,6 +75,14 @@ function SignUpForm() {
         <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Password" required />
         <input ref={confirmPasswordRef} type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} placeholder="Confirm Password" required />
         {formErrors.confirmPassword && <p className="error">{formErrors.confirmPassword}</p>}
+        <input type="number" name='mobile' value={formData.mobile} onChange={handleChange} placeholder='Mobile' required />
+        <input type='text' name='gender' value={formData.gender} onChange={handleChange} placeholder='Gender' required />
+        <select name="gender" value={formData.gender} onChange={handleChange} required>
+          <option value="">Your Gender?</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
         <button type="submit">Signup</button>
       </form>
     </div>

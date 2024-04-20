@@ -5,56 +5,57 @@ import bcrypt from "bcrypt";
 // Define the schema for the user collection
 const userSchema = new Schema(
   {
-    // User's full name
     fullname: {
       type: String,
       required: true,
       trim: true,
       index: true,
     },
-    // User's username
+
     username: {
       type: String,
       required: true,
       trim: true,
     },
-    // User's email (unique)
+
     email: {
       type: String,
       required: true,
       unique: true,
       index: true,
     },
-    // User's mobile number
+
     mobile: {
       type: String,
       required: true,
     },
+    gender: {
+      type: String,
+      enum: ["male", "female", "other"],
+      required: true,
+    },
+    preferences: { type: String },
     profilepic: {
       type: String, // cloudinary url
     },
-    // Whether the user smokes or not
     smoke: {
       type: String,
       enum: ["yes", "no"],
       required: true,
     },
-    // User's age
     age: {
       type: Number,
       required: true,
     },
-    // User's password (hashed)
     password: {
       type: String,
       required: true,
     },
-    // User's refresh token (used for token refreshing)
     refreshToken: {
       type: String,
     },
   },
-  { timestamps: true } // Adds createdAt and updatedAt fields
+  { timestamps: true }
 );
 
 // Middleware to hash the password before saving to the database
@@ -79,9 +80,9 @@ userSchema.methods.generateAccessToken = function () {
       username: this.username,
       fullname: this.fullname,
     },
-    process.env.ACCESS_TOKEN_SECRET, // Secret key for signing the token
+    process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY, // Expiry time for the token
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
     }
   );
 };
@@ -96,9 +97,9 @@ userSchema.methods.generateRefreshToken = function () {
       username: this.username,
       fullname: this.fullname,
     },
-    process.env.REFRESH_TOKEN_SECRET, // Secret key for signing the token
+    process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRY, // Expiry time for the token
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
     }
   );
 };
