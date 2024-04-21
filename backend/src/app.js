@@ -25,7 +25,7 @@ app.use(cookieParser());
 import userRouter from "./routes/user.routes.js";
 import videoRouter from "./routes/video.routes.js";
 import articleRouter from "./routes/article.routes.js";
-import contactRouter from "./routes/emergenctcontact.routes.js";
+import contactRouter from "./routes/emergencycontact.routes.js"
 import feedbackRouter from "./routes/feedback.routes.js";
 
 // Use user routes

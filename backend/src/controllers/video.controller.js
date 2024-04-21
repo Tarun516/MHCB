@@ -1,8 +1,8 @@
-import { Resource } from "../models/Resource";
-import { asyncHandler } from "../utils/asyncHandler";
+import { Resource } from "../models/resouce.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { uploadOnCloudinary } from "../utils/cloudinary";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 // Controller to fetch all videos
 const getAllVideos = asyncHandler(async (req, res) => {

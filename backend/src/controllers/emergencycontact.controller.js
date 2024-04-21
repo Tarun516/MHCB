@@ -1,4 +1,4 @@
-import { Contact } from "../models/emergencycontacts.model";
+import { Contact } from "../models/emergencycontact.model.js";
 import { ApiError } from "../utils/ApiError.js";
 
 const getAllEmergencyContacts = async (req, res) => {
