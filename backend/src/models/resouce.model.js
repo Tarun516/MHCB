@@ -19,9 +19,7 @@ const resourceSchema = new Schema(
     },
     url: {
       type: String,
-      required: () => {
-        if (this.type === "Video") return true;
-      },
+      required: true,
       unique: true,
     },
     author: {
@@ -34,9 +32,6 @@ const resourceSchema = new Schema(
     },
     image: {
       type: String,
-      required: () => {
-        if (this.type === "Article") return true;
-      },
     },
     videoId: {
       type: String,
@@ -51,6 +46,12 @@ const resourceSchema = new Schema(
         return this.type === "Article";
       },
       unique: true,
+    },
+
+    tag: {
+      type: String,
+      enum: ["General", "Stress and Anxiety", "Sleep", "Depression"],
+      required: true,
     },
   },
   { timestamps: true }

@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar";
+import Chatbot from "./Chatbot";
 
 const Home = () => {
   return (
@@ -7,7 +8,9 @@ const Home = () => {
       <header>
         <Navbar />
       </header>
-      <body></body>
+      <body>
+        <Chatbot/>
+      </body>
       <footer></footer>
     </>
   );

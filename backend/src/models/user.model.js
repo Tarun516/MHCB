@@ -25,22 +25,27 @@ const userSchema = new Schema(
       index: true,
     },
 
+    userId: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
+
     mobile: {
       type: String,
       required: true,
     },
     gender: {
       type: String,
-      enum: ["male", "female", "other"],
+      enum: ["Male", "Female", "Other"],
       required: true,
     },
-    preferences: { type: String },
     profilepic: {
       type: String, // cloudinary url
     },
     smoke: {
       type: String,
-      enum: ["yes", "no"],
+      enum: ["Yes", "No"],
       required: true,
     },
     age: {
@@ -74,11 +79,10 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
-      // Payload
       _id: this._id,
       email: this.email,
       username: this.username,
-      fullname: this.fullname,
+      fullName: this.fullName,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
@@ -86,16 +90,10 @@ userSchema.methods.generateAccessToken = function () {
     }
   );
 };
-
-// Method to generate a refresh token for the user
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {
-      // Payload
       _id: this._id,
-      email: this.email,
-      username: this.username,
-      fullname: this.fullname,
     },
     process.env.REFRESH_TOKEN_SECRET,
     {
@@ -103,6 +101,5 @@ userSchema.methods.generateRefreshToken = function () {
     }
   );
 };
-
 // Create and export the User model
 export const User = mongoose.model("User", userSchema);

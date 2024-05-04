@@ -16,6 +16,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
     return { accessToken, refreshToken };
   } catch (error) {
+    console.log(error);
     throw new ApiError(500, "Something went wrong");
   }
 };
@@ -31,21 +32,11 @@ const registerUser = asyncHandler(async (req, res) => {
     smoke,
     mobile,
     gender,
-    preferences,
+    userId,
   } = req.body;
   //validation - not empty
   if (
-    [
-      fullname,
-      email,
-      username,
-      password,
-      age,
-      smoke,
-      mobile,
-      gender,
-      preferences,
-    ].some((field) => field?.trim() === "")
+    [fullName, email, username, password].some((field) => field?.trim() === "")
   ) {
     throw new ApiError(400, "All fields are compulsory");
   }
@@ -62,12 +53,12 @@ const registerUser = asyncHandler(async (req, res) => {
 
   //upload them to cloudinary,profile pic
   const profilepicLocalPath = req.files?.profilepic[0]?.path;
-  const profilepic = await uploadOnCloudinary(profilepicLocalPath);
+  const profilePic = await uploadOnCloudinary(profilepicLocalPath);
 
   //create user object - create entry in db
   const user = await User.create({
     fullname,
-    profilepic: profilepic?.url || "",
+    profilepic: profilePic?.url || "",
     email,
     password,
     username: username.toLowerCase(),
@@ -75,7 +66,7 @@ const registerUser = asyncHandler(async (req, res) => {
     gender,
     smoke,
     mobile,
-    preferences: preferences.toLowerCase(),
+    userId,
   });
 
   //remove password and refresh token field from response
@@ -99,7 +90,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
 
   //username or email
-  if (!email || !username) {
+  if (!(email || username)) {
     throw new ApiError(400, "Username or password is required");
   }
 

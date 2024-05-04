@@ -12,22 +12,16 @@ const getAllArticles = asyncHandler(async (req, res) => {
 
 // Controller to create a new article
 const createArticle = asyncHandler(async (req, res) => {
-  const { title, content, image, author } = req.body;
+  const { title, content, image, author, url, tag, articleId } = req.body;
 
   // Check if both image URL and external URL are provided
-  if (!image) {
-    throw new ApiError(
-      400,
-      "Both imageUrl and externalUrl cannot be provided simultaneously"
-    );
+  if (!url) {
+    throw new ApiError(400, "Provide url to the resource");
   }
   // If imageUrl is provided, upload image to Cloudinary
   let Image;
   if (image) {
     Image = await uploadOnCloudinary(image);
-    if (!Image) {
-      throw new ApiError(500, "Failed to upload image to Cloudinary");
-    }
   }
 
   // Create a new resource entry for the article
@@ -37,6 +31,9 @@ const createArticle = asyncHandler(async (req, res) => {
     title,
     content,
     author,
+    url,
+    articleId,
+    tag,
     image: Image ? Image.secure_url : undefined,
   });
 
@@ -84,15 +81,13 @@ const updateArticleById = asyncHandler(async (req, res) => {
   let Image;
   if (image) {
     Image = await uploadOnCloudinary(imageUrl);
-    if (!Image) {
-      throw new ApiError(500, "Failed to upload image to Cloudinary");
-    }
   }
 
   // Update article fields
   article.title = title;
   article.content = content;
-  article.image = image ? Image.secure_url : undefined;
+  article.image = image;
+  article.url = url;
 
   await article.save();
   return res
