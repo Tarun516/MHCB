@@ -138,10 +138,15 @@ const logoutUser = asyncHandler(async (req, res) => {
       new: true,
     }
   );
+
+  // Clear user authentication status
+  req.session.isLoggedIn = false;
+
   const options = {
     httpOnly: true,
     secure: true,
   };
+
   return res
     .status(200)
     .clearCookie("accessToken", options)
@@ -196,4 +201,22 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     throw new ApiError(401, error?.message || "Invalid refresh token");
   }
 });
-export { registerUser, loginUser, logoutUser, refreshAccessToken };
+
+const checkLoginStatus = async (req, res) => {
+  try {
+    // Check if the user is authenticated
+    const isLoggedIn = req.user ? true : false;
+    res.status(200).json({ isLoggedIn });
+  } catch (error) {
+    console.error("Error checking login status:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  refreshAccessToken,
+  checkLoginStatus,
+};

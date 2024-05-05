@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -15,14 +16,13 @@ function LoginForm() {
     event.preventDefault();
 
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch("http://localhost:8000/api/v1/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-
       if (response.ok) {
         // Login successful, redirect to home page
         window.location.href = "/home";
@@ -37,79 +37,57 @@ function LoginForm() {
   };
 
   return (
-    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-      <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
-        </h2>
-      </div>
-
-      <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form class="space-y-6" onSubmit={handleSubmit}>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
+        <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Log in</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Email input */}
           <div>
-            <label
-              for="email"
-              class="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Email address
-            </label>
-            <div class="mt-2">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
+            <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">Email address</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-indigo-500"
+              placeholder="Email address"
+            />
           </div>
-
+          {/* Password input */}
           <div>
-            <div class="flex items-center justify-between">
-              <label
-                for="password"
-                class="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Password
-              </label>
-            </div>
-            <div class="mt-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={formData.password}
-                onChange={handleChange}
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
+            <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-indigo-500"
+              placeholder="Password"
+            />
           </div>
-
-          <div>
+          {/* Sign in button */}
+          <div className="text-center">
             <button
               type="submit"
-              class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="bg-indigo-500 text-white font-semibold px-4 py-3 rounded-lg shadow-sm hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
             >
               Sign in
             </button>
           </div>
-
-          {/* Signup link */}
-          <p class="mt-4 text-center text-sm text-gray-500">
-            Don't have an account?
-            <a
-              href="/signup"
-              class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-            >
-              Sign up
-            </a>
-          </p>
         </form>
+        {/* Sign up link */}
+        <p className="mt-4 text-sm text-gray-600 text-center">
+          Don't have an account?{" "}
+          <a href="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
+            Sign up
+          </a>
+        </p>
       </div>
     </div>
   );
