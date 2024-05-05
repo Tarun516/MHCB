@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-<<<<<<< HEAD
-import axios from "axios";
-=======
 import { useNavigate } from "react-router-dom";
->>>>>>> 30550851fdee5babf84cb8bff0c69dc6388aef00
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -21,13 +17,14 @@ function LoginForm() {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/api/v1/users/login", {
+      const response = await fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
+
       if (response.ok) {
         // Login successful, navigate to home page
         navigate("/home");
