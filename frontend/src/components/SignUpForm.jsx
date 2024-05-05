@@ -7,7 +7,6 @@ function SignUpForm() {
     email: "",
     mobile: "",
     smoke: "",
-    mobile: "",
     gender: "",
     age: "",
     password: "",

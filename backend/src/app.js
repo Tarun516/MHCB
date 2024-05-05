@@ -13,12 +13,11 @@ app.use(
 
 app.use(
   express.json({
-    limit: "16kb",
+    limit: "25kb",
   })
 );
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
 app.use(cookieParser());
 
 // Import routes
@@ -30,9 +29,7 @@ import feedbackRouter from "./routes/feedback.routes.js";
 import webhookRouter from "./routes/webhook.routes.js";
 
 // Use user routes
-app.post("/", (req, res) => {
-  
-});
+app.post("/", (req, res) => {});
 
 app.use("/api/v1/users", userRouter);
 

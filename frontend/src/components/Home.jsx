@@ -9,7 +9,7 @@ const Home = () => {
         <Navbar />
       </header>
       <body>
-        <Chatbot/>
+        <Chatbot />
       </body>
       <footer></footer>
     </>

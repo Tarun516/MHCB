@@ -1,17 +1,16 @@
-// routes/webhook.routes.js
-
 import express from "express";
 import {
   handleVideoResourceRequest,
   handleArticleResourceRequest,
 } from "../controllers/webhook.controller.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/", (req, res) => {
+router.post("/", verifyJWT, (req, res) => {
   // Extract necessary information from the request
   const { queryResult } = req.body;
-  const { intent, parameters} = queryResult;
+  const { intent, parameters } = queryResult;
   console.log(parameters);
   // Route request based on intent
   switch (intent.displayName) {

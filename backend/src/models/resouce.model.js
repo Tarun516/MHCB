@@ -19,8 +19,9 @@ const resourceSchema = new Schema(
     },
     url: {
       type: String,
-      required: true,
-      unique: true,
+      required: () => {
+        return this.type === "Video" || this.type == "Article";
+      },
     },
     author: {
       type: String,
@@ -33,19 +34,18 @@ const resourceSchema = new Schema(
     image: {
       type: String,
     },
-    videoId: {
-      type: String,
-      required: () => {
-        return this.type === "Video";
-      },
-      unique: true,
-    },
     articleId: {
-      type: String,
+      type: Number,
       required: () => {
         return this.type === "Article";
       },
-      unique: true,
+    },
+
+    videoId: {
+      type: Number,
+      required: () => {
+        return this.type === "Video";
+      },
     },
 
     tag: {
