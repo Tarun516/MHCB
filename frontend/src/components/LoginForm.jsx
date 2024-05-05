@@ -1,11 +1,16 @@
 import React, { useState } from "react";
+<<<<<<< HEAD
 import axios from "axios";
+=======
+import { useNavigate } from "react-router-dom";
+>>>>>>> 30550851fdee5babf84cb8bff0c69dc6388aef00
 
 function LoginForm() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -24,8 +29,8 @@ function LoginForm() {
         body: JSON.stringify(formData),
       });
       if (response.ok) {
-        // Login successful, redirect to home page
-        window.location.href = "/home";
+        // Login successful, navigate to home page
+        navigate("/home");
       } else {
         // Login failed, display error message to user and clear password field
         console.error("Login failed:", response.statusText);
