@@ -28,9 +28,6 @@ import contactRouter from "./routes/emergencycontact.routes.js";
 import feedbackRouter from "./routes/feedback.routes.js";
 import webhookRouter from "./routes/webhook.routes.js";
 
-// Use user routes
-app.post("/", (req, res) => {});
-
 app.use("/api/v1/users", userRouter);
 
 // Use video routes
@@ -45,7 +42,6 @@ app.use("/api/v1/emergency-contacts", contactRouter);
 // Use feedback routes
 app.use("/api/v1/feedback", feedbackRouter);
 
-// Use webhook route
-app.use("/api/v1/webhook", webhookRouter);
+app.use("/webhook", webhookRouter);
 
 export { app };

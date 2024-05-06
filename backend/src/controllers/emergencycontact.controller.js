@@ -1,13 +1,13 @@
-import { Contact } from "../models/emergencycontact.model.js";
+import {asyncHandler} from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
+import { Contact } from "../models/emergencycontact.model.js";
 
-const getAllEmergencyContacts = async (req, res) => {
-  try {
-    const contacts = await Contact.find();
-    return res.status(200).json(contacts);
-  } catch (error) {
-    new ApiError(404, "No contacts were found");
+const getAllEmergencyContacts = asyncHandler(async (req, res) => {
+  const contacts = await Contact.find();
+  if (!contacts || contacts.length === 0) {
+    throw new ApiError(404, "No contacts were found");
   }
-};
+  res.status(200).json(contacts);
+});
 
 export { getAllEmergencyContacts };

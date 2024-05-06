@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-<<<<<<< HEAD
-import axios from "axios";
-=======
 import { useNavigate } from "react-router-dom";
->>>>>>> 30550851fdee5babf84cb8bff0c69dc6388aef00
+
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -28,6 +25,7 @@ function LoginForm() {
         },
         body: JSON.stringify(formData),
       });
+
       if (response.ok) {
         // Login successful, navigate to home page
         navigate("/home");
@@ -42,13 +40,12 @@ function LoginForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
         <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Log in</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email input */}
           <div>
-            <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">Email address</label>
             <input
               id="email"
               name="email"
@@ -57,13 +54,12 @@ function LoginForm() {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-indigo-500"
+              className="w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-purple-500 bg-gray-100"
               placeholder="Email address"
             />
           </div>
           {/* Password input */}
           <div>
-            <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">Password</label>
             <input
               id="password"
               name="password"
@@ -72,7 +68,7 @@ function LoginForm() {
               required
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-indigo-500"
+              className="w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-purple-500 bg-gray-100"
               placeholder="Password"
             />
           </div>
@@ -80,7 +76,7 @@ function LoginForm() {
           <div className="text-center">
             <button
               type="submit"
-              className="bg-indigo-500 text-white font-semibold px-4 py-3 rounded-lg shadow-sm hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+              className="bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold px-4 py-3 rounded-lg shadow-sm hover:from-pink-400 hover:to-red-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
             >
               Sign in
             </button>

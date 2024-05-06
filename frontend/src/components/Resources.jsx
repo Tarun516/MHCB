@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+import Card from "./Card";
 
 function Resources() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -12,9 +13,13 @@ function Resources() {
         if (selectedCategory) {
           let response;
           if (selectedCategory === "Video") {
-            response = await axios.get("http://localhost:8000/api/v1/videos/get-videos");
+            response = await axios.get(
+              "http://localhost:8000/api/v1/videos/get-videos"
+            );
           } else if (selectedCategory === "Article") {
-            response = await axios.get("http://localhost:8000/api/v1/articles/get-articles");
+            response = await axios.get(
+              "http://localhost:8000/api/v1/articles/get-articles"
+            );
           }
           setResources(Array.isArray(response.data) ? response.data : []);
         }
@@ -31,55 +36,62 @@ function Resources() {
   };
 
   return (
-    <>
+    <div className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 min-h-screen">
       <header>
         <Navbar />
       </header>
-      <div>
-        <div>
-          <button onClick={() => handleCategoryChange("Video")}>Videos</button>
-          <button onClick={() => handleCategoryChange("Article")}>
-            Articles
-          </button>
-          {/* Add more buttons for other categories */}
+      <body>
+        <div className="w-full">
+          <div className="button-container p-4 bg-red mt-[50px] flex justify-center gap-3">
+            <button
+              className={`button ${
+                selectedCategory === "Video" && "selected"
+              } bg-white-700 rounded-lg p-4`}
+              onClick={() => handleCategoryChange("Video")}
+              style={{ marginRight: "10px" }}
+            >
+              Videos
+            </button>
+            <button
+              className={`button ${
+                selectedCategory === "Article" && "selected"
+              } bg-white-700 rounded-lg p-4`}
+              onClick={() => handleCategoryChange("Article")}
+            >
+              Articles
+            </button>
+            {/* Add more buttons for other categories */}
+          </div>
+          <div className="flex justify-center items-center gap-20 mt-10">
+            {resources.map((resource) => (
+              <div
+                key={resource._id}
+                className="resource-card bg-slate-300 py-9 px-6 flex "
+              >
+                {resource.type === "Video" && (
+                  <Card
+                    key={resource._id}
+                    image={resource.image}
+                    title={resource.title}
+                    content={resource.content}
+                    url={resource.url}
+                  />
+                )}
+                {resource.type === "Article" && (
+                  <Card
+                    key={resource._id}
+                    image={resource.image}
+                    title={resource.title}
+                    content={resource.content}
+                    url={resource.url}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-        <div>
-          {resources.map((resource) => (
-            
-            <div key={resource._id} className="resource-card p-4 bg-black" >
-              {resource.type === "Video" && (
-                <>
-                  <img src={resource.image} alt={resource.title} />
-                  <h3>{resource.title}</h3>
-                  <p>{resource.content}</p>
-                  <a
-                    href={resource.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Watch
-                  </a>
-                </>
-              )}
-              {resource.type === "Article" && (
-                <>
-                  <img src={resource.image} alt={resource.title} />
-                  <h3>{resource.title}</h3>
-                  <p>{resource.content}</p>
-                  <a
-                    href={resource.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Read
-                  </a>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
+      </body>
+    </div>
   );
 }
 

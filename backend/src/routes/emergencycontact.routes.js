@@ -4,6 +4,6 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.get("/get-emergency-contacts", verifyJWT, getAllEmergencyContacts);
+router.get("/get-emergency-contacts", getAllEmergencyContacts);
 
 export default router;

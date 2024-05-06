@@ -50,7 +50,16 @@ const resourceSchema = new Schema(
 
     tag: {
       type: String,
-      enum: ["General", "Stress and Anxiety", "Sleep", "Depression"],
+      enum: [
+        "general_videos",
+        "general_articles",
+        "sleep_articles",
+        "sleep_videos",
+        "depression_articles",
+        "depression_videos",
+        "stress_articles",
+        "stress_videos",
+      ],
       required: true,
     },
   },

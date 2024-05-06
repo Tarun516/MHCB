@@ -5,6 +5,8 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 
+let isLoggedIn = false;
+
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -120,6 +122,8 @@ const loginUser = asyncHandler(async (req, res) => {
     secure: true,
   };
 
+  isLoggedIn = true;
+
   //send cookies
   return res
     .status(200)
@@ -129,29 +133,33 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  await User.findByIdAndUpdate(
-    req.user._id,
-    {
-      refreshToken: undefined,
-    },
-    {
-      new: true,
-    }
-  );
+  try {
+    // Revoke refresh token by setting it to undefined in the database
+    await User.findByIdAndUpdate(
+      req.user._id,
+      { refreshToken: undefined },
+      { new: true }
+    );
 
-  // Clear user authentication status
-  req.session.isLoggedIn = false;
+    // Clear user authentication status in the session
+    req.session.isLoggedIn = false;
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
+    // Configure options for clearing cookies
+    const options = {
+      httpOnly: true,
+      secure: true, // Set to true if using HTTPS
+    };
 
-  return res
-    .status(200)
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, {}, "User logged out"));
+    // Clear access and refresh tokens from cookies and send response
+    res
+      .status(200)
+      .clearCookie("accessToken", options)
+      .clearCookie("refreshToken", options)
+      .json({ message: "User logged out successfully" });
+  } catch (error) {
+    console.error("Error logging out:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
@@ -202,16 +210,18 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
-const checkLoginStatus = async (req, res) => {
+const checkLoginStatus = asyncHandler(async (req, res) => {
   try {
-    // Check if the user is authenticated
-    const isLoggedIn = req.user ? true : false;
+    // Check if the user is authenticated based on the presence of a session
+    const isLoggedIn = req.session.isLoggedIn || false;
+    console.log(isLoggedIn);
+    console.log("User login status checked successfully.");
     res.status(200).json({ isLoggedIn });
   } catch (error) {
     console.error("Error checking login status:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+});
 
 export {
   registerUser,
