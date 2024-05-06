@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 
+=======
+>>>>>>> aeb738cf9e87a8c538aa31687222b05e43df57e3
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -18,7 +21,7 @@ function LoginForm() {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/api/v1/users/login", {
+      const response = await fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
