@@ -1,9 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-
-=======
->>>>>>> aeb738cf9e87a8c538aa31687222b05e43df57e3
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -45,7 +41,9 @@ function LoginForm() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Log in</h2>
+        <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+          Log in
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email input */}
           <div>
@@ -88,7 +86,10 @@ function LoginForm() {
         {/* Sign up link */}
         <p className="mt-4 text-sm text-gray-600 text-center">
           Don't have an account?{" "}
-          <a href="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
+          <a
+            href="/signup"
+            className="font-medium text-indigo-600 hover:text-indigo-500"
+          >
             Sign up
           </a>
         </p>
