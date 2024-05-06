@@ -4,6 +4,6 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post("/get-feedback", verifyJWT, addFeedback);
+router.post("/add-feedback",verifyJWT, addFeedback);
 
 export default router;

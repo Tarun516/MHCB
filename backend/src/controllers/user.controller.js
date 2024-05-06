@@ -5,7 +5,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 
-let isLoggedIn = false;
+let loggedInUser = false;
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -122,14 +122,24 @@ const loginUser = asyncHandler(async (req, res) => {
     secure: true,
   };
 
-  isLoggedIn = true;
+  loggedInUser = true;
 
   //send cookies
   return res
     .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
-    .json(new ApiResponse(200, "User Loggedin Succesfully"));
+    .json(
+      new ApiResponse(
+        200,
+        {
+          user: loggedInUser,
+          accessToken,
+          refreshToken,
+        },
+        "User logged In Successfully"
+      )
+    );
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
@@ -155,7 +165,13 @@ const logoutUser = asyncHandler(async (req, res) => {
       .status(200)
       .clearCookie("accessToken", options)
       .clearCookie("refreshToken", options)
-      .json({ message: "User logged out successfully" });
+      .json(
+        new ApiResponse(
+          200,
+          { accessToken, refreshToken: newRefreshToken },
+          "Access token refreshed"
+        )
+      );
   } catch (error) {
     console.error("Error logging out:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -213,14 +229,20 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 const checkLoginStatus = asyncHandler(async (req, res) => {
   try {
     // Check if the user is authenticated based on the presence of a session
-    const isLoggedIn = req.session.isLoggedIn || false;
-    console.log(isLoggedIn);
+    const loggedInUser = req.session.loggedInUser || false;
+    console.log(loggedInUser);
     console.log("User login status checked successfully.");
-    res.status(200).json({ isLoggedIn });
+    res.status(200).json({ loggedInUser });
   } catch (error) {
     console.error("Error checking login status:", error);
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+const getCurrentUser = asyncHandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiResponse(200, req.user, "User fetched successfully"));
 });
 
 export {
@@ -229,4 +251,5 @@ export {
   logoutUser,
   refreshAccessToken,
   checkLoginStatus,
+  getCurrentUser,
 };

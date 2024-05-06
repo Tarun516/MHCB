@@ -18,9 +18,9 @@ const handleSleepArticlesIntent = asyncHandler(async (parameters) => {
 
     // Construct the fulfillment text
     let fulfillmentText = "Here are the top two sleep-related articles:\n";
-    // articlesData.forEach((article) => {
-    //   fulfillmentText += `${article.title}: ${article.url}\n`;
-    // });
+    articlesData.forEach((article) => {
+      fulfillmentText += `${article.title}: ${article.url}\n`;
+    });
 
     return { fulfillmentText };
   } catch (error) {

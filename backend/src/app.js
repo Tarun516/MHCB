@@ -44,4 +44,9 @@ app.use("/api/v1/feedback", feedbackRouter);
 
 app.use("/webhook", webhookRouter);
 
+app.get("/", (req, res) => {
+  // Send "Hello" as response
+  res.send("Hello");
+});
+
 export { app };

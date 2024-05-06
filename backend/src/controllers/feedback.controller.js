@@ -3,10 +3,16 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const addFeedback = asyncHandler(async (req, res) => {
+  const { user, chatbotrating, comment } = req.body;
+
+  if (!user || !chatbotrating || !comment) {
+    return res.status(400).json({ message: "Incomplete feedback data" });
+  }
+
   const newFeedback = new Feedback({
     user: req.user._id,
-    chatbotrating: req.body.chatbotrating,
-    comment: req.body.comment,
+    chatbotrating: chatbotrating,
+    comment: comment,
   });
 
   await newFeedback.save();

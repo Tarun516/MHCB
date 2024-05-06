@@ -14,11 +14,11 @@ function Resources() {
           let response;
           if (selectedCategory === "Video") {
             response = await axios.get(
-              "http://localhost:8000/api/v1/videos/get-videos"
+              "http://localhost:3000/api/v1/videos/get-videos"
             );
           } else if (selectedCategory === "Article") {
             response = await axios.get(
-              "http://localhost:8000/api/v1/articles/get-articles"
+              "http://localhost:3000/api/v1/articles/get-articles"
             );
           }
           setResources(Array.isArray(response.data) ? response.data : []);
@@ -42,11 +42,11 @@ function Resources() {
       </header>
       <body>
         <div className="w-full">
-          <div className="button-container p-4 bg-red mt-[50px] flex justify-center gap-3">
+          <div className="button-container p-4 bg-red mt-[60px] flex justify-center gap-5">
             <button
               className={`button ${
                 selectedCategory === "Video" && "selected"
-              } bg-white-700 rounded-lg p-4`}
+              } bg-transparent rounded-lg text-xl`}
               onClick={() => handleCategoryChange("Video")}
               style={{ marginRight: "10px" }}
             >
@@ -55,7 +55,7 @@ function Resources() {
             <button
               className={`button ${
                 selectedCategory === "Article" && "selected"
-              } bg-white-700 rounded-lg p-4`}
+              } bg-transparent rounded-lg text-xl`}
               onClick={() => handleCategoryChange("Article")}
             >
               Articles
@@ -66,12 +66,11 @@ function Resources() {
             {resources.map((resource) => (
               <div
                 key={resource._id}
-                className="resource-card bg-slate-300 py-9 px-6 flex "
+                className="resource-card bg-slate-300 py-9 px-6 w-50"
               >
                 {resource.type === "Video" && (
                   <Card
                     key={resource._id}
-                    image={resource.image}
                     title={resource.title}
                     content={resource.content}
                     url={resource.url}
@@ -80,7 +79,6 @@ function Resources() {
                 {resource.type === "Article" && (
                   <Card
                     key={resource._id}
-                    image={resource.image}
                     title={resource.title}
                     content={resource.content}
                     url={resource.url}

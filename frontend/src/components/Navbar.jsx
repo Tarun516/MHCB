@@ -12,7 +12,7 @@ const Navbar = () => {
       }
 
       // Perform signout actions by making a POST request to the logout endpoint
-      const response = await fetch("http://localhost:8000/api/v1/users/logout", {
+      const response = await fetch("http://localhost:3000/api/v1/users/logout", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${accessToken}`, // Include the access token in the request headers

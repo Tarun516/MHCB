@@ -1,72 +1,102 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar";
+
 const Feedback = () => {
   const [user, setUser] = useState("");
   const [chatbotRating, setChatbotRating] = useState(0);
   const [comment, setComment] = useState("");
   const [feedbackList, setFeedbackList] = useState([]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newFeedback = {
-      _id: Math.random(),
       user: user,
       chatbotrating: chatbotRating,
       comment: comment,
       createdAt: new Date(),
     };
-    setFeedbackList([...feedbackList, newFeedback]);
-    setUser("");
-    setChatbotRating(0);
-    setComment("");
+
+    // Send the feedback data to the backend
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/v1/feedback/add-feedback",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newFeedback),
+        }
+      );
+
+      if (response.ok) {
+        // Add the feedback to the local state if the request is successful
+        const data = await response.json();
+        setFeedbackList([...feedbackList, data]);
+        setUser("");
+        setChatbotRating(0);
+        setComment("");
+      } else {
+        console.error("Failed to submit feedback");
+      }
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+    }
   };
 
   return (
     <>
-    <header>
-      <Navbar/>
-    </header>
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", minHeight: "100vh" }}>
-      <header style={{ width: "100%", textAlign: "center", backgroundColor: "#007bff", color: "white", padding: "10px" }}>
-        <h1>Feedback</h1>
+      <header>
+        <Navbar />
       </header>
-      <br/>
-      <br/>
-      <div style={{ width: "100%", maxWidth: "400px" }}>
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-          <label style={{ marginBottom: "10px", width: "100%", display: "flex", alignItems: "center" }}>
-            Chatbot Rating:
-            <div style={{ display: "flex" }}>
+      <div className="flex flex-col items-center  min-h-screen justify-center">
+        <div className="w-full max-w-md mt-5 flex flex-col  ">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <label htmlFor="chatbotRating">Chatbot Rating:</label>
+            <select
+              id="chatbotRating"
+              value={chatbotRating}
+              onChange={(e) => setChatbotRating(e.target.value)}
+              className="border-2 rounded p-2"
+            >
               {[1, 2, 3, 4, 5].map((rating) => (
-                <label key={rating} style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", marginRight: "10px" }} onClick={() => setChatbotRating(rating)}>
-                  <input type="checkbox" style={{ display: "none" }} />
-                  <span style={{ fontSize: "0.8rem", marginBottom: "5px" }}>{rating}</span>
-                  <span style={{ width: "10px", height: "10px", borderRadius: "50%", border: "1px solid #ccc", backgroundColor: chatbotRating >= rating ? "#007bff" : "transparent" }}></span>
-                </label>
+                <option key={rating} value={rating}>
+                  {rating}
+                </option>
               ))}
+            </select>
+
+            <label htmlFor="comment" className="text-black p-2">
+              Comment:
+            </label>
+            <textarea
+              id="comment"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="border rounded p-2"
+            />
+
+            <button
+              type="submit"
+              className="bg-black text-white py-2 px-4 rounded cursor-pointer"
+            >
+              Submit Feedback
+            </button>
+          </form>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-3xl mt-8">
+          {feedbackList.map((feedback) => (
+            <div key={feedback._id} className="bg-gray-200 p-4 rounded">
+              <div className="font-bold">{feedback.user}</div>
+              <div className="mt-2">Rating: {feedback.chatbotrating}</div>
+              <div className="mt-2">Comment: {feedback.comment}</div>
+              <div className="mt-2 text-sm text-gray-700">
+                Timestamp: {new Date(feedback.createdAt).toLocaleString()}
+              </div>
             </div>
-          </label>
-          <br/>
-          <label style={{ marginBottom: "10px", width: "100%" }}>
-            Comment:
-            <textarea value={comment} onChange={(e) => setComment(e.target.value)} style={{ width: "100%", padding: "5px", borderRadius: "5px", border: "1px solid #ccc" }} />
-          </label>
-          <button type="submit" style={{ backgroundColor: "black", color: "white", padding: "10px 20px", borderRadius: "5px", border: "none", cursor: "pointer" }}>Submit Feedback</button>
-          
-        </form>
+          ))}
+        </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px", width: "100%", maxWidth: "800px" }}>
-        {feedbackList.map((feedback) => (
-          <div key={feedback._id} style={{ backgroundColor: "#f0f0f0", padding: "20px", borderRadius: "10px" }}>
-            <div style={{ fontWeight: "bold" }}>{feedback.user}</div>
-            <div style={{ marginTop: "10px" }}>Rating: {feedback.chatbotrating}</div>
-            <div style={{ marginTop: "10px" }}>Comment: {feedback.comment}</div>
-            <div style={{ marginTop: "10px", fontSize: "0.8rem", color: "#777" }}>Timestamp: {new Date(feedback.createdAt).toLocaleString()}</div>
-          </div>
-        ))}
-      </div>
-      <button onClick={fetchOtherFeedbacks} style={{ backgroundColor: "#007bff", color: "white", padding: "10px 20px", borderRadius: "5px", border: "none", cursor: "pointer", marginTop: "20px" }}>Fetch Feedback from Others</button>
-    </div>
     </>
   );
 };
