@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require @babel/register 'src/test/**/*.test.js'"
   },
   "author": "",
   "license": "ISC",
@@ -22,5 +22,11 @@
     "mongoose": "^8.3.1",
     "multer": "^1.4.5-lts.1",
     "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "@babel/register": "^7.23.7",
+    "chai": "^5.1.0",
+    "mocha": "^10.4.0",
+    "sinon": "^17.0.1"
   }
 }
