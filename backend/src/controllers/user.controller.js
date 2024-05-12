@@ -38,7 +38,7 @@ const registerUser = asyncHandler(async (req, res) => {
   } = req.body;
   //validation - not empty
   if (
-    [fullName, email, username, password].some((field) => field?.trim() === "")
+    [fullname, email, username, password].some((field) => field?.trim() === "")
   ) {
     throw new ApiError(400, "All fields are compulsory");
   }
@@ -129,17 +129,12 @@ const loginUser = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
-    .json(
-      new ApiResponse(
-        200,
-        {
-          user: loggedInUser,
-          accessToken,
-          refreshToken,
-        },
-        "User logged In Successfully"
-      )
-    );
+    .json({
+      user: (loggedInUser = true),
+      accessToken,
+      refreshToken,
+      message: "User logged In Successfully",
+    });
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
@@ -204,7 +199,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
     const options = {
       httpOnly: true,
-      secure: true,
+      // secure: true,
     };
 
     const { accessToken, newRefreshToken } =
@@ -228,8 +223,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
 const checkLoginStatus = asyncHandler(async (req, res) => {
   try {
-    // Check if the user is authenticated based on the presence of a session
-    const loggedInUser = req.session.loggedInUser || false;
+    // Check if the session exists and contains loggedInUser
+
+    req.session && req.session.loggedInUser ? req.session.loggedInUser : false;
     console.log(loggedInUser);
     console.log("User login status checked successfully.");
     res.status(200).json({ loggedInUser });

@@ -1,44 +1,66 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/v1/users/check-login-status",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Received loggedInUser:", data.loggedInUser);
+          setIsLoggedIn(data.loggedInUser);
+        } else {
+          throw new Error(
+            `Failed to check login status: ${response.statusText}`
+          );
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error.message);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
+
   const handleSignOut = async () => {
     try {
-      // Retrieve the access token from local storage
-      const accessToken = localStorage.getItem("accessToken");
-
-      // If access token is not available, handle the error
-      if (!accessToken) {
-        throw new Error("Access token not found");
-      }
-
-      // Perform signout actions by making a POST request to the logout endpoint
-      const response = await fetch("http://localhost:3000/api/v1/users/logout", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`, // Include the access token in the request headers
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        "http://localhost:3000/api/v1/users/logout",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
-        // If the logout request is successful, redirect to the root page
-        window.location.href = "/";
+        document.cookie = "accessToken=; Max-Age=-99999999;";
+        setIsLoggedIn(false);
+        window.location.href = "/home";
       } else {
-        // If the logout request fails, log the error
-        console.error("Logout failed:", response.statusText);
+        throw new Error(`Logout failed: ${response.statusText}`);
       }
     } catch (error) {
-      console.error("Error signing out:", error);
-      // Handle any errors that occur during signout
+      console.error("Error signing out:", error.message);
     }
   };
 
   return (
     <nav className="bg-black p-4 fixed top-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-        {/* Logo */}
-
-        {/* Navigation Links */}
         <div className="space-x-4">
           <a
             href="/resources"
@@ -60,15 +82,25 @@ const Navbar = () => {
           </a>
         </div>
 
-        {/* Authentication Buttons */}
-        <div>
-          <button
-            className="text-gray-300 hover:bg-transparent hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-            onClick={handleSignOut}
-          >
-            Sign out
-          </button>
-        </div>
+        {isLoggedIn ? (
+          <div>
+            <button
+              className="text-gray-300 hover:bg-transparent hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+              onClick={handleSignOut}
+            >
+              Sign out
+            </button>
+          </div>
+        ) : (
+          <div>
+            <a
+              href="/"
+              className="text-gray-300 hover:bg-transparent hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Login
+            </a>
+          </div>
+        )}
       </div>
     </nav>
   );

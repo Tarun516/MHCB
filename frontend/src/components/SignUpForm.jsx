@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 
 function SignUpForm() {
   const [formData, setFormData] = useState({
@@ -24,10 +23,17 @@ function SignUpForm() {
     event.preventDefault();
 
     try {
-      const response = await axios.post(
+      const response = await fetch(
         "http://localhost:3000/api/v1/users/register",
-        formData
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
       );
+
       if (response.ok) {
         window.location.href = "/";
       } else {
@@ -61,7 +67,7 @@ function SignUpForm() {
               name="fullname"
               type="text"
               required
-              value={formData.fullName}
+              value={formData.fullname}
               onChange={handleChange}
               className="mt-1 p-3 block w-full rounded-md border border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />

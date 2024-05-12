@@ -74,9 +74,7 @@ function LoginForm() {
                 placeholder="Password"
               />
             </div>
-            <div>
-              <button radioGroup="xxxx">YYYY</button>
-            </div>
+
             {/* Sign in button */}
             <div className="text-center">
               <button
