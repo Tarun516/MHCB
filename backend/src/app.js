@@ -57,4 +57,6 @@ app.get("/", (req, res) => {
   res.send("Hello");
 });
 
+console.log("testing...........")
+
 export { app };
