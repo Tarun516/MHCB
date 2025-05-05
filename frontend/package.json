@@ -12,9 +12,9 @@
     "test": "mocha --require @babel/register 'src/test/**/*.js'"
   },
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^1.8.2",
     "core-js": "^3.37.0",
-    "postcss-cli": "^11.0.0",
+    "postcss-cli": "^11.0.1",
     "react": "^18.2.0",
     "react-axios": "^2.0.6",
     "react-dom": "^18.2.0",
